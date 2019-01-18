@@ -68,7 +68,7 @@
 					
 					<tr>
 						<td colspan="3">
-							<a href="#">회원가입하기</a>
+							<a href="${ contextPath }/showInsertForm.me">회원가입하기</a>
 							<a href="#">아이디/비밀번호 찾기</a>
 						</td>
 					</tr>
@@ -113,6 +113,7 @@
 		}
 		
 		function board(){
+			location.href = "selectList.bo";
 		}
 	</script>
 </body>

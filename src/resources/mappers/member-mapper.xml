@@ -28,5 +28,20 @@
 		WHERE USER_ID = #{userId} 
 		AND USER_PWD = #{userPwd}
 	</select>
+	
+	<!-- insert, update, delete는 int -->
+	<insert id="insertMember" parameterType="Member">
+		INSERT INTO MEMBER
+		VALUES  (SEQ_MID.NEXTVAL
+				, #{userId}
+				, #{userPwd}
+				, #{userName}
+				, #{email}
+				, #{birthDay}
+				, #{gender}
+				, #{phone}
+				, #{address}
+				, SYSDATE, SYSDATE, DEFAULT)
+	</insert>
 
 </mapper>

@@ -9,11 +9,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("*.me")
-public class MemberFrontController extends HttpServlet {
+@WebServlet("*.bo")
+public class BoardFrontController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    public MemberFrontController() {
+    public BoardFrontController() {
         super();
     }
 
@@ -23,26 +23,18 @@ public class MemberFrontController extends HttpServlet {
 		
 		String uri = request.getRequestURI();
 		System.out.println("요청 uri > " + uri);
-		// 요청 uri > /mb/login.me
 		
-		
-		// / + 1 : /의 다음 문자
-		String action = uri.substring(uri.lastIndexOf("/") + 1, uri.lastIndexOf(".me"));
+		String action = uri.substring(uri.lastIndexOf("/") + 1, uri.lastIndexOf(".bo"));
 		System.out.println("action > " + action);
-		// action > login
-		
+	
 		
 		RequestDispatcher rd = null;
 		
-		switch(action) {
-			case "login" : rd = request.getRequestDispatcher("login");						break;
-			case "logout" : rd = request.getRequestDispatcher("logout"); 					break;
-			case "showInsertForm" : rd = request.getRequestDispatcher("showInsertForm"); 	break;
-			case "minsert" : rd = request.getRequestDispatcher("minsert"); 					break;
+		switch (action) {
+			case "selectList" : rd = request.getRequestDispatcher("selectList"); 	break;
 		}
 		
 		rd.forward(request, response);
-	
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
