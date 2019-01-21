@@ -5,6 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <title>Board List</title>
 </head>
 <body>
@@ -89,6 +90,19 @@
 			
 		</div>
 	
+		<script>
+			$(function(){
+				$("#boardArea").find("td").mouseenter(function(){
+					$(this).parents("tr").css({"background":"#FA5858", "cursor":"pointer"});
+				}).mouseout(function(){
+					$(this).parents("tr").css({"background":"white"});
+				}).click(function(){
+					var bid = $(this).parents().children("td").eq(0).text();
+					//console.log(bid);
+					location.href="selectOne.bo?bid=" + bid;
+				});
+			});
+		</script>
 	</c:if>
 	
 	<c:if test="${ empty sessionScope.loginUser }">

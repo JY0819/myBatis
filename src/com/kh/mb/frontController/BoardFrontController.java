@@ -32,6 +32,7 @@ public class BoardFrontController extends HttpServlet {
 		
 		switch (action) {
 			case "selectList" : rd = request.getRequestDispatcher("selectList"); 	break;
+			case "selectOne" : rd = request.getRequestDispatcher("selectOne"); 		break;
 		}
 		
 		rd.forward(request, response);

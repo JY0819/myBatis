@@ -6,6 +6,7 @@ import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 
 import com.kh.mb.board.model.exception.BoardSelectListException;
+import com.kh.mb.board.model.exception.BoardSelectOneException;
 import com.kh.mb.board.model.vo.Board;
 import com.kh.mb.board.model.vo.PageInfo;
 
@@ -48,4 +49,45 @@ public class BoardDao {
 		return list;
 	}
 
+	// 게시물 조회수 증가용 메소드
+	public int updateCount(SqlSession session, int bid) throws BoardSelectOneException{
+		int result = session.update("Board.updateBoardCount", bid);
+		
+		if (result <= 0) {
+			session.rollback();
+			session.close();
+			throw new BoardSelectOneException("게시물 조회수 증가 실패!");
+		}
+		
+		return result;
+	}
+
+	// 게시물 조회용 메소드
+	public Board selectOneBoard(SqlSession session, int bid) throws BoardSelectOneException {
+		Board b = null;
+		
+		b = session.selectOne("Board.selectBoardOne", bid);
+		
+		System.out.println(b);
+		
+		if (b == null) {
+			session.close();
+			throw new BoardSelectOneException("게시물 상세보기 실패!");
+		}
+
+		return b;
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

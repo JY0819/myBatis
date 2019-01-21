@@ -4,6 +4,7 @@ import org.apache.ibatis.session.SqlSession;
 
 import com.kh.mb.board.model.dao.BoardDao;
 import com.kh.mb.board.model.exception.BoardSelectListException;
+import com.kh.mb.board.model.exception.BoardSelectOneException;
 import com.kh.mb.board.model.vo.Board;
 import com.kh.mb.board.model.vo.PageInfo;
 
@@ -37,4 +38,39 @@ public class BoardServiceImpl implements BoardService {
 		return list;
 	}
 
+	// 게시판 상세보기용 메소드
+	@Override
+	public Board selectOneBoard(int bid) throws BoardSelectOneException {
+		SqlSession session = getSqlSession();
+		Board b = null;
+		
+		// 조회수 증가
+		int result = new BoardDao().updateCount(session, bid);
+		
+		if (result > 0) {
+			session.commit();
+			b = new BoardDao().selectOneBoard(session, bid);
+		}
+		
+		session.close();
+		
+		return b;
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

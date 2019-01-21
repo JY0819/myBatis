@@ -1,6 +1,7 @@
 package com.kh.mb.board.model.vo;
 
 import java.sql.Date;
+import java.util.ArrayList;
 
 public class Board implements java.io.Serializable {
 
@@ -14,13 +15,15 @@ public class Board implements java.io.Serializable {
 	private Date createDate;
 	private Date modifyDate;
 	private String status;
+	
+	private ArrayList<Reply> replyList;
 
 	public Board() {
 
 	}
 
 	public Board(int bid, int bType, String bTitle, String bContent, int bWriter, String userName, int bCount,
-			Date createDate, Date modifyDate, String status) {
+			Date createDate, Date modifyDate, String status, ArrayList<Reply> replyList) {
 		super();
 		this.bid = bid;
 		this.bType = bType;
@@ -32,6 +35,7 @@ public class Board implements java.io.Serializable {
 		this.createDate = createDate;
 		this.modifyDate = modifyDate;
 		this.status = status;
+		this.replyList = replyList;
 	}
 
 	public int getBid() {
@@ -114,11 +118,21 @@ public class Board implements java.io.Serializable {
 		this.status = status;
 	}
 
+	public ArrayList<Reply> getReplyList() {
+		return replyList;
+	}
+
+	public void setReplyList(ArrayList<Reply> replyList) {
+		this.replyList = replyList;
+	}
+
 	@Override
 	public String toString() {
 		return "Board [bid=" + bid + ", bType=" + bType + ", bTitle=" + bTitle + ", bContent=" + bContent + ", bWriter="
 				+ bWriter + ", userName=" + userName + ", bCount=" + bCount + ", createDate=" + createDate
-				+ ", modifyDate=" + modifyDate + ", status=" + status + "]";
+				+ ", modifyDate=" + modifyDate + ", status=" + status + ", replyList=" + replyList + "]";
 	}
 
+
+	
 }
