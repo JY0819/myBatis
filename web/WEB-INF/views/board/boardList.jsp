@@ -13,7 +13,7 @@
 		<jsp:include page="../common/menubar.jsp" />
 		<h1 align="center">게시판</h1>
 		
-		<!-- 검색 영역 추가 -->
+		<!-- 검색영역 추가 -->
 		<div id="searchArea" align="center">
 			<label>검색조건</label>
 			<select id="searchCondition" name="searchCondition">
@@ -22,8 +22,20 @@
 				<option value="content">내용</option>
 			</select>
 			<input type="search" id="search">
-			<button>검색하기</button>
+			<button onclick="searchBoard();">검색하기</button>
 		</div>
+		
+		<script>
+			function searchBoard(){
+				var searchCondition = $("#searchCondition").val();
+				var searchValue = $("#search").val();
+				
+				console.log(searchCondition);
+				console.log(searchValue);
+				
+				location.href = "search.bo?searchCondition=" + searchCondition + "&searchValue=" + searchValue;
+			}
+		</script>
 		
 		<!-- 게시물 목록 영역 -->
 		<table id="boardArea" align="center" style="text-align: center;">

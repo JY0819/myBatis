@@ -5,8 +5,10 @@ import org.apache.ibatis.session.SqlSession;
 import com.kh.mb.board.model.dao.BoardDao;
 import com.kh.mb.board.model.exception.BoardSelectListException;
 import com.kh.mb.board.model.exception.BoardSelectOneException;
+import com.kh.mb.board.model.exception.SearchBoardException;
 import com.kh.mb.board.model.vo.Board;
 import com.kh.mb.board.model.vo.PageInfo;
+import com.kh.mb.board.model.vo.SearchCondition;
 
 import static com.kh.mb.common.Template.*;
 
@@ -55,6 +57,29 @@ public class BoardServiceImpl implements BoardService {
 		session.close();
 		
 		return b;
+	}
+
+	// 검색 결과 수 조회용 메소드
+	@Override
+	public int getSearchResultListCount(SearchCondition sc) throws SearchBoardException {
+		SqlSession session = getSqlSession();
+		
+		int result = new BoardDao().getSearchResultListCount(session, sc);
+		
+		session.close();
+		
+		return result;
+	}
+
+	// 검색 결과 게시물 조회용 메소드
+	public ArrayList<Board> selectSearchResultList(SearchCondition sc, PageInfo pi) throws SearchBoardException {
+		SqlSession session = getSqlSession();
+		
+		ArrayList<Board> list = new BoardDao().selectSearchResultList(session, sc, pi);
+		
+		session.close();
+		
+		return list;
 	}
 
 	

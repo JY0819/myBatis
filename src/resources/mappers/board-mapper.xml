@@ -17,7 +17,7 @@
 		<result property="modifyDate" column="MODIFY_DATE" />
 		<result property="status" column="STATUS" />
 	</resultMap>
-	
+
 	<resultMap type="Board" id="boardResultSet2">
 		<id property="bid" column="BID" />
 		<result property="bType" column="BTYPE" />
@@ -29,9 +29,10 @@
 		<result property="createDate" column="CREATE_DATE" />
 		<result property="modifyDate" column="MODIFY_DATE" />
 		<result property="status" column="STATUS" />
-		<collection property="replyList" javaType="java.util.ArrayList" resultMap="replyResultSet"></collection>
+		<collection property="replyList"
+			javaType="java.util.ArrayList" resultMap="replyResultSet"></collection>
 	</resultMap>
-	
+
 	<resultMap type="Reply" id="replyResultSet">
 		<id property="rid" column="RID" />
 		<result property="rContent" column="RCONTENT" />
@@ -42,12 +43,13 @@
 		<result property="modifyDate" column="MODIFY_DATE" />
 		<result property="status" column="STATUS" />
 	</resultMap>
-	
+
 
 	<!-- 게시글 수 조회용 쿼리문 -->
 	<select id="selectListCount" resultType="_int">
 		SELECT COUNT(*)
-		FROM BOARD
+		FROM
+		BOARD
 		WHERE STATUS = 'Y'
 	</select>
 
@@ -55,7 +57,8 @@
 	<select id="selectBoardList" resultMap="boardResultSet">
 		SELECT *
 		FROM BOARD B
-		JOIN MEMBER M ON (B.BWRITER = M.MID)
+		JOIN
+		MEMBER M ON (B.BWRITER = M.MID)
 		WHERE B.STATUS = 'Y'
 		ORDER
 		BY BID DESC
@@ -64,23 +67,82 @@
 	<!-- 조회수 증가용 쿼리문 -->
 	<update id="updateBoardCount" parameterType="_int">
 		UPDATE BOARD
-		SET BCOUNT = (SELECT BCOUNT FROM BOARD WHERE BID = #{bid}) + 1
-		WHERE BID = #{bid}
+		SET
+		BCOUNT = (SELECT BCOUNT FROM BOARD WHERE BID = #{bid}) + 1
+		WHERE BID =
+		#{bid}
 	</update>
 
 	<!-- 상세보기용 쿼리문 -->
-	<select id="selectBoardOne" parameterType="_int" resultMap="boardResultSet2">
-		SELECT * 
+	<select id="selectBoardOne" parameterType="_int"
+		resultMap="boardResultSet2">
+		SELECT *
 		FROM BOARD B
 		JOIN MEMBER M ON (B.BWRITER = M.MID)
-		LEFT JOIN REPLY R ON (R.REF_BID = B.BID)
+		LEFT JOIN REPLY R ON
+		(R.REF_BID = B.BID)
 		WHERE B.BID = #{bid}
 		AND B.STATUS = 'Y'
 		ORDER BY RID DESC
 	</select>
 
-
-
+	<!-- 검색 결과 수 조회용 쿼리문 -->
+	<select id="selectSearchResultCount" resultType="_int">
+		SELECT COUNT(*)
+		FROM BOARD B
+		JOIN MEMBER M ON (B.BWRITER = M.MID)
+		WHERE B.STATUS = 'Y'
+		<!-- 
+		<if test="writer != null">
+			AND USER_NAME = #{writer}
+		</if>
+		<if test="title != null">
+			AND BTITLE LIKE '%' || #{title} || '%'
+		</if>
+		<if test="content != null">
+			AND BCONTENT LIKE '%' || #{content} || '%'
+		</if>
+		 -->
+		 <choose>
+		 	<when test="writer != null">
+		 		AND USER_NAME = #{writer}
+		 	</when>
+		 	<when test="title != null">
+		 		AND BTITLE LIKE '%' || #{title} || '%'
+		 	</when>
+		 	<otherwise>
+		 		AND BCONTENT LIKE '%' || #{content} || '%'
+		 	</otherwise>
+		 </choose>
+	</select>
+	
+	<!-- 만약 뭐리문 안에 < (부등호) 기호가 포함된다면 연산자가 아니라 태그로 인식한다. -->
+	<!-- 해결방안 : 쿼리문을 cdata 주석으로 감싸야 한다. -->
+	
+	<!-- 	
+	<![CDATA[
+		
+	]]>
+	 -->
+	 
+	<select id="selectSearchResultList" resultMap="boardResultSet">
+		SELECT * 
+		FROM BOARD B
+		JOIN MEMBER M ON (B.BWRITER = M.MID)
+		WHERE B.STATUS = 'Y'
+		<choose>
+			<when test="writer != null">
+				AND USER_NAME = #{writer}
+			</when>
+			<when test="title != null">
+				AND BTITLE LIKE '%' || #{title} || '%'
+			</when>
+			<otherwise>
+				AND BCONTENT LIKE '%' || #{content} || '%'
+			</otherwise>
+		</choose>
+		ORDER BY BID DESC
+	</select>
 
 
 

@@ -7,8 +7,10 @@ import org.apache.ibatis.session.SqlSession;
 
 import com.kh.mb.board.model.exception.BoardSelectListException;
 import com.kh.mb.board.model.exception.BoardSelectOneException;
+import com.kh.mb.board.model.exception.SearchBoardException;
 import com.kh.mb.board.model.vo.Board;
 import com.kh.mb.board.model.vo.PageInfo;
+import com.kh.mb.board.model.vo.SearchCondition;
 
 public class BoardDao {
 
@@ -76,6 +78,35 @@ public class BoardDao {
 		}
 
 		return b;
+	}
+	
+	// 검색 결과 수 조회용 메소드
+	public int getSearchResultListCount(SqlSession session, SearchCondition sc) throws SearchBoardException {
+		int result = session.selectOne("Board.selectSearchResultCount", sc);
+	
+		if (result <= 0) {
+			session.close();
+			throw new SearchBoardException("검색 결과 카운트 조회 실패!");
+		}
+		
+		return 0;
+	}
+	
+	// 검색 결과 게시물 조회용 메소드
+	public ArrayList<Board> selectSearchResultList(SqlSession session, SearchCondition sc, PageInfo pi) throws SearchBoardException {
+		ArrayList<Board> list = null;
+		
+		int offset = (pi.getCurrentPage() - 1) * pi.getLimit();
+		RowBounds rowBounds = new RowBounds(offset, pi.getLimit());
+		
+		list = (ArrayList) session.selectList("Board.selectSearchResultList", sc, rowBounds);
+		
+		System.out.println(list);
+		
+		if (list == null) {
+			throw new SearchBoardException("검색 결과 리스트 조회 실패!");
+		}
+		return list;
 	}
 
 	
